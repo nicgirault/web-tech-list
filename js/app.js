@@ -1,14 +1,14 @@
 'use strict';
 var app;
 
-app = angular.module('angularParseBoilerplate', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics']);
+app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics']);
 
 app.config(function($locationProvider, $stateProvider, $urlRouterProvider, ParseProvider) {
   $locationProvider.hashPrefix('!');
-  $stateProvider.state('task', {
+  $stateProvider.state('technology', {
     url: '/:locale',
-    controller: 'TaskCtrl',
-    templateUrl: 'task.html'
+    controller: 'TechnologyCtrl',
+    templateUrl: 'technology.html'
   });
   $urlRouterProvider.otherwise('/fr');
   return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
@@ -18,55 +18,55 @@ app.run(function($rootScope, $state) {
   return $rootScope.$state = $state;
 });
 
-app.controller('TaskCtrl', function($scope, Task) {
-  $scope.addTask = function() {
-    $scope.newTask.save().then(function(task) {
-      return $scope.fetchTasks();
+app.controller('TechnologyCtrl', function($scope, Technology) {
+  $scope.addTechnology = function() {
+    $scope.newTechnology.save().then(function(technology) {
+      return $scope.fetchTechnologies();
     });
-    return $scope.newTask = new Task;
+    return $scope.newTechnology = new Technology;
   };
-  $scope.removeTask = function(task) {
-    return task.destroy().then(function() {
-      return _.remove($scope.tasks, function(task) {
-        return task.objectId === null;
+  $scope.removeTechnology = function(technology) {
+    return technology.destroy().then(function() {
+      return _.remove($scope.technologies, function(technology) {
+        return technology.objectId === null;
       });
     });
   };
-  $scope.editingTask = function(task) {
-    return task.editing = true;
+  $scope.editingTechnology = function(technology) {
+    return technology.editing = true;
   };
-  $scope.editTask = function(task) {
-    task.save();
-    return task.editing = false;
+  $scope.editTechnology = function(technology) {
+    technology.save();
+    return technology.editing = false;
   };
-  $scope.cancelEditing = function(task) {
-    task.title = task._cache.title;
-    return task.editing = false;
+  $scope.cancelEditing = function(technology) {
+    technology.title = technology._cache.title;
+    return technology.editing = false;
   };
-  $scope.fetchTasks = function() {
-    return Task.query().then(function(tasks) {
-      return $scope.tasks = tasks;
+  $scope.fetchTechnologies = function() {
+    return Technology.query().then(function(technologies) {
+      return $scope.technologies = technologies;
     });
   };
-  $scope.fetchTasks();
-  return $scope.newTask = new Task;
+  $scope.fetchTechnologies();
+  return $scope.newTechnology = new Technology;
 });
 
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-app.factory('Task', function(Parse) {
-  var Task;
-  return Task = (function(_super) {
-    __extends(Task, _super);
+app.factory('Technology', function(Parse) {
+  var Technology;
+  return Technology = (function(_super) {
+    __extends(Technology, _super);
 
-    function Task() {
-      return Task.__super__.constructor.apply(this, arguments);
+    function Technology() {
+      return Technology.__super__.constructor.apply(this, arguments);
     }
 
-    Task.configure("Task", "title");
+    Technology.configure("Technology", "title");
 
-    return Task;
+    return Technology;
 
   })(Parse.Model);
 });
