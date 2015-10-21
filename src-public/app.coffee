@@ -1,6 +1,6 @@
 'use strict'
 
-app = angular.module 'angularParseBoilerplate', [
+app = angular.module 'webTechList', [
   'ng'
   'ngResource'
   'ui.router'
@@ -21,16 +21,16 @@ app.config (
   $locationProvider.hashPrefix '!'
 
   $stateProvider
-  .state 'task',
+  .state 'technology',
     url: '/:locale'
-    controller: 'TaskCtrl'
-    templateUrl: 'task.html'
+    controller: 'TechnologyCtrl'
+    templateUrl: 'technology.html'
 
   $urlRouterProvider.otherwise '/fr'
 
   ParseProvider.initialize(
-    "N2xyMRbsrFcBuzq7TXLwieDGM9FzwODEY44LLFOP", # Application ID
-    "zTAHO7HKWvbV1awq5wQlexRc368lOQtSbmycOi0O"  # REST API Key
+    "OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", # Application ID
+    "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp"  # REST API Key
   )
 
 app.run ($rootScope, $state) ->
