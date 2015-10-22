@@ -6163,10 +6163,9 @@ button.close {
     display: none !important;
   }
 }
-body {
-  background-image: url('../img/blur-background.jpg');
+tags-input .tags {
+  border-radius: 5px;
 }
-.navbar-brand,
-h1 {
-  color: white;
+tags-input .tags .tag-item {
+  background: none;
 }
