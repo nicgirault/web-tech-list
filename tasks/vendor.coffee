@@ -15,9 +15,20 @@ gulp.task 'vendor', (done) ->
     'bower_components/angulartics/src/angulartics-ga.js'
     'bower_components/moment/moment.js'
     'bower_components/lodash/dist/lodash.js'
+    'bower_components/ng-tags-input/ng-tags-input.min.js'
   ]
   .pipe(concat('vendor.js'))
   .on 'error', gutil.log
   .pipe gulp.dest('public/js')
+  .on 'end', done
+  return
+
+gulp.task 'vendor-style', (done) ->
+  gulp.src [
+    'bower_components/ng-tags-input/ng-tags-input.min.css'
+  ]
+  .pipe(concat('vendor.css'))
+  .on 'error', gutil.log
+  .pipe gulp.dest('public/css')
   .on 'end', done
   return

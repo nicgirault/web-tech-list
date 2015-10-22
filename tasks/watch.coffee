@@ -19,4 +19,4 @@ gulp.task 'watch', ->
     gulp.watch 'src-public/**/*.jade', ['jade']
     gulp.watch 'src-public/styles/*.less', ['less']
     gulp.watch 'src-public/translations/*.yml', ['translations']
-    gulp.watch 'vendor', ['vendor']
+    gulp.watch 'vendor', ['vendor', 'vendor-style']

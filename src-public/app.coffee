@@ -9,6 +9,7 @@ app = angular.module 'webTechList', [
   'Parse'
   'angulartics'
   'angulartics.google.analytics'
+  'ngTagsInput'
 ]
 
 app.config (
