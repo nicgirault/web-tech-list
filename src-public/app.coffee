@@ -21,12 +21,20 @@ app.config (
   $locationProvider.hashPrefix '!'
 
   $stateProvider
+  .state 'technologyList',
+    url: '/technology'
+    controller: 'TechnologyListCtrl'
+    templateUrl: 'technologyList.html'
   .state 'technology',
-    url: '/:locale'
+    url: '/technology/:id'
     controller: 'TechnologyCtrl'
     templateUrl: 'technology.html'
+    resolve:
+      technology: (Technology, $stateParams) ->
+        return unless $stateParams.id
+        Technology.find($stateParams.id)
 
-  $urlRouterProvider.otherwise '/fr'
+  $urlRouterProvider.otherwise '/technology'
 
   ParseProvider.initialize(
     "OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", # Application ID
