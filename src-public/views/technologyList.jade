@@ -5,7 +5,8 @@ form(role="form", ng-submit="addTechnology()")
     input.form-control(type="text", ng-model="newTechnology.title", autofocus)
     span.input-group-btn
       button.btn.btn-default(type="submit") Add
-
-div(ng-repeat="technology in technologies")
-  p {{ technology.title }}
-  a.button(ui-sref="technology({id: technology.objectId})") Edit
+hr
+.panel.panel-default(ng-repeat="technology in technologies")
+  .panel-body
+    p {{ technology.title }}
+    a.btn.btn-default(ui-sref="technology({id: technology.objectId})") Edit
