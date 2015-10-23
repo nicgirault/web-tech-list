@@ -46,7 +46,8 @@
     "karma-firefox-launcher": "~0.1.6",
     "karma-safari-launcher": "~0.1.1",
     "karma-ie-launcher": "~0.2.0",
-    "karma-coffee-preprocessor": "~0.3.0"
+    "karma-coffee-preprocessor": "~0.3.0",
+    "angular-mocks": "~1.4.7"
   },
   "version": "0.0.0",
   "main": "gulpfile.js"

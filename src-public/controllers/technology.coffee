@@ -11,3 +11,6 @@ app.controller 'TechnologyCtrl', ($scope, technology, tagManager) ->
         _.merge $tag, _tag
     technology.save()
     true # true because tag is always valid
+
+  $scope.save = ->
+    technology.save()

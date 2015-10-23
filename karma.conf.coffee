@@ -1,6 +1,5 @@
 mainBowerFiles = require 'main-bower-files'
 _ = require 'lodash'
-
 module.exports = (config) ->
   config.set
 
@@ -15,7 +14,9 @@ module.exports = (config) ->
 
     # list of files / patterns to load in the browser
     files: _(mainBowerFiles('**/*.js')).concat([
+      'bower_components/angular-mocks/angular-mocks.js'
       'src-public/**/*.coffee'
+      'public/js/templates.js'
       'tests/unit/**/*.coffee'
     ]).value()
 
