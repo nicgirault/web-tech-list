@@ -1,3 +1,7 @@
 h1 {{ technology.title }}
 
-tags-input(ng-model="tags")
+tags-input(
+  ng-model="technology.tags"
+  display-property="label"
+  on-tag-adding="addTag($tag)"
+)

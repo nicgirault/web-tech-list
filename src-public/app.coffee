@@ -31,9 +31,11 @@ app.config (
     controller: 'TechnologyCtrl'
     templateUrl: 'technology.html'
     resolve:
-      technology: (Technology, $stateParams) ->
+      technology: (Technology, tagManager, $stateParams) ->
         return unless $stateParams.id
         Technology.find($stateParams.id)
+      tagList: (tagManager) ->
+        return tagManager.promise
 
   $urlRouterProvider.otherwise '/technology'
 
