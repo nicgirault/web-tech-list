@@ -10,6 +10,7 @@ app = angular.module 'webTechList', [
   'angulartics'
   'angulartics.google.analytics'
   'ngTagsInput'
+  'satellizer'
 ]
 
 app.config (
@@ -17,7 +18,11 @@ app.config (
   $stateProvider
   $urlRouterProvider
   ParseProvider
+  $authProvider
 ) ->
+
+  $authProvider.google
+    clientId: '607186455495-i89bp9888vlnm9rbt3ea6ftp32lrbjc3.apps.googleusercontent.com'
 
   $locationProvider.hashPrefix '!'
 
