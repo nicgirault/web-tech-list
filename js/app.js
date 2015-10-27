@@ -3,7 +3,15 @@ var app;
 
 app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics', 'ngTagsInput']);
 
-app.config(function($locationProvider, $stateProvider, $urlRouterProvider, ParseProvider) {
+app.run(function($rootScope, $state) {
+  return $rootScope.$state = $state;
+});
+
+app.config(function(ParseProvider) {
+  return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
+});
+
+app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
   $locationProvider.hashPrefix('!');
   $stateProvider.state('technologyList', {
     url: '/technology',
@@ -14,35 +22,41 @@ app.config(function($locationProvider, $stateProvider, $urlRouterProvider, Parse
     controller: 'TechnologyCtrl',
     templateUrl: 'technology.html',
     resolve: {
-      technology: function(Technology, $stateParams) {
+      technology: function(Technology, tagManager, $stateParams) {
         if (!$stateParams.id) {
           return;
         }
         return Technology.find($stateParams.id);
+      },
+      tagList: function(tagManager) {
+        return tagManager.promise;
       }
     }
   });
-  $urlRouterProvider.otherwise('/technology');
-  return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
+  return $urlRouterProvider.otherwise('/technology');
 });
 
-app.run(function($rootScope, $state) {
-  return $rootScope.$state = $state;
-});
-
-app.controller('TechnologyCtrl', function($scope, technology) {
+app.controller('TechnologyCtrl', function($scope, technology, tagManager) {
   $scope.technology = technology;
-  return $scope.tags = [
-    {
-      text: 'just'
-    }, {
-      text: 'some'
-    }, {
-      text: 'cool'
-    }, {
-      text: 'tags'
+  if (technology.tags == null) {
+    technology.tags = [];
+  }
+  $scope.addTag = function($tag) {
+    var tag;
+    tag = tagManager.find($tag.label);
+    if (tag != null) {
+      $tag.objectId = tag.objectId;
+    } else {
+      tagManager.add($tag.label).then(function(_tag) {
+        return _.merge($tag, _tag);
+      });
     }
-  ];
+    technology.save();
+    return true;
+  };
+  return $scope.save = function() {
+    return technology.save();
+  };
 });
 
 app.controller('TechnologyListCtrl', function($scope, Technology) {
@@ -80,6 +94,39 @@ app.controller('TechnologyListCtrl', function($scope, Technology) {
   return $scope.newTechnology = new Technology;
 });
 
+app.filter('filterByTags', function() {
+  return function(technologies, query) {
+    var filtered, tags;
+    if (!query) {
+      return technologies;
+    }
+    tags = query.toLowerCase().split(" ");
+    filtered = [];
+    (technologies || []).forEach(function(technology) {
+      var matches, tag, technologyTags;
+      technologyTags = (function() {
+        var _i, _len, _ref, _results;
+        _ref = technology.tags || [];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          tag = _ref[_i];
+          _results.push(tag.label);
+        }
+        return _results;
+      })();
+      matches = tags.every(function(tag) {
+        return _.findIndex(technologyTags, function(technologyTag) {
+          return technologyTag.substr(0, tag.length).toLowerCase() === tag;
+        }) > -1 || technology.title.substr(0, tag.length).toLowerCase() === tag;
+      });
+      if (matches) {
+        return filtered.push(technology);
+      }
+    });
+    return filtered;
+  };
+});
+
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -92,7 +139,7 @@ app.factory('Tag', function(Parse) {
       return Tag.__super__.constructor.apply(this, arguments);
     }
 
-    Tag.configure("Tag", "name");
+    Tag.configure("Tag", "label");
 
     return Tag;
 
@@ -111,9 +158,52 @@ app.factory('Technology', function(Parse) {
       return Technology.__super__.constructor.apply(this, arguments);
     }
 
-    Technology.configure("Technology", "title");
+    Technology.configure("Technology", "title", "tags");
 
     return Technology;
 
   })(Parse.Model);
+});
+
+app.service('tagManager', function(Tag) {
+  var promise, tagList;
+  tagList = [];
+  promise = Tag.query().then(function(_tags) {
+    return tagList = _tags;
+  });
+  return {
+    promise: promise,
+    getTagList: function() {
+      return tagList;
+    },
+    find: function(label) {
+      return _.find(tagList, {
+        label: label
+      });
+    },
+    add: function(label) {
+      var tag;
+      tag = new Tag({
+        label: label
+      });
+      return tag.save().then(function(_tag) {
+        tagList.push(_tag);
+        return _tag;
+      });
+    }
+  };
+});
+
+app.service('technologyManager', function(Technology) {
+  var promise, technologyList;
+  technologyList = [];
+  promise = Technology.query().then(function(_technologies) {
+    return technologyList = _technologies;
+  });
+  return {
+    promise: promise,
+    getTechnologyList: function() {
+      return technologyList;
+    }
+  };
 });
