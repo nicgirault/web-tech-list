@@ -9,7 +9,7 @@ app.service 'tagManager', (Tag) ->
     return tagList
 
   find: (label) ->
-    return _.find tagList, (_tag) -> _tag.label == label
+    return _.find tagList, label: label
 
   add: (label) ->
     tag = new Tag label: label

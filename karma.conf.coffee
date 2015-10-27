@@ -9,7 +9,7 @@ module.exports = (config) ->
 
     # frameworks to use
     # available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine']
+    frameworks: ['mocha', 'sinon', 'sinon-chai']
 
 
     # list of files / patterns to load in the browser
@@ -36,7 +36,7 @@ module.exports = (config) ->
     # test results reporter to use
     # possible values: 'dots', 'progress'
     # available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress']
+    reporters: ['nyan']
 
 
     # web server port
@@ -54,7 +54,7 @@ module.exports = (config) ->
     # - config.LOG_WARN
     # - config.LOG_INFO
     # - config.LOG_DEBUG
-    logLevel: config.LOG_INFO
+    logLevel: config.LOG_WARN
 
 
     # enable / disable watching file and executing tests whenever any file changes
@@ -63,7 +63,7 @@ module.exports = (config) ->
 
     # start these browsers
     # available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome']
+    browsers: ['PhantomJS']
 
 
     # Continuous Integration mode

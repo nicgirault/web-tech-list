@@ -18,7 +18,7 @@ app.config (
     resolve:
       technology: (Technology, tagManager, $stateParams) ->
         return unless $stateParams.id
-        Technology.find($stateParams.id)
+        Technology.find $stateParams.id
       tagList: (tagManager) ->
         return tagManager.promise
 
