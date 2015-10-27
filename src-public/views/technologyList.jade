@@ -7,6 +7,11 @@ form(role="form", ng-submit="addTechnology()")
       button.btn.btn-default(type="submit") Add
 hr
 .panel.panel-default(ng-repeat="technology in technologies")
+  .panel-heading
+    h4
+      a(ui-sref="technology({id: technology.objectId})") {{ technology.title }}
   .panel-body
-    p {{ technology.title }}
-    a.btn.btn-default(ui-sref="technology({id: technology.objectId})") Edit
+    div
+      ul.tag-cloud
+        li(ng-repeat="tag in technology.tags")
+          a(href="#") {{ tag.label }}
