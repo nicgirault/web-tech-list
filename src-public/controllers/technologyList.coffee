@@ -1,10 +1,9 @@
-app.controller 'TechnologyListCtrl', ($scope, Technology) ->
+app.controller 'TechnologyListCtrl', ($scope, Technology, technologyManager) ->
 
   $scope.addTechnology = ->
     $scope.newTechnology.save().then (technology) ->
-      $scope.fetchTechnologies()
+      $scope.technologies.push technology
     $scope.newTechnology = new Technology
-    console.log new Technology
 
   $scope.removeTechnology = (technology) ->
     technology.destroy().then () ->
@@ -18,14 +17,9 @@ app.controller 'TechnologyListCtrl', ($scope, Technology) ->
     technology.save()
     technology.editing = false
 
-  $scope.cancelEditing = (technology) ->
-    technology.title = technology._cache.title
-    technology.editing = false
+  $scope.thumbsUp = technologyManager.thumbsUp
+  $scope.thumbsDown = technologyManager.thumbsDown
 
-  $scope.fetchTechnologies = ->
-    Technology.query()
-    .then (technologies) ->
-      $scope.technologies = technologies
+  $scope.technologies = technologyManager.getTechnologyList()
 
-  $scope.fetchTechnologies()
   $scope.newTechnology = new Technology

@@ -11,6 +11,9 @@ app.config (
     url: '/technology'
     controller: 'TechnologyListCtrl'
     templateUrl: 'technologyList.html'
+    resolve:
+      technologyList: (technologyManager) ->
+        return technologyManager.promise
   .state 'technology',
     url: '/technology/:id'
     controller: 'TechnologyCtrl'
