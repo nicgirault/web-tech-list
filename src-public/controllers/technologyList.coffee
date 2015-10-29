@@ -1,9 +1,9 @@
-app.controller 'TechnologyListCtrl', ($scope, Technology, technologyManager) ->
+app.controller 'TechnologyListCtrl', ($scope, technologyManager) ->
 
   $scope.addTechnology = ->
     $scope.newTechnology.save().then (technology) ->
       $scope.technologies.push technology
-    $scope.newTechnology = new Technology
+    $scope.newTechnology = technologyManager.createTechnology()
 
   $scope.removeTechnology = (technology) ->
     technology.destroy().then () ->
@@ -22,4 +22,4 @@ app.controller 'TechnologyListCtrl', ($scope, Technology, technologyManager) ->
 
   $scope.technologies = technologyManager.getTechnologyList()
 
-  $scope.newTechnology = new Technology
+  $scope.newTechnology = technologyManager.createTechnology()

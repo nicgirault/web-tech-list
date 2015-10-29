@@ -2,22 +2,21 @@ app.service 'technologyManager', (Technology) ->
   technologyList = []
   promise = Technology.query().then (_technologies) ->
     technologyList = _technologies
+  increment = (value) ->
+    if value? then value + 1 else 1
 
   promise: promise
 
+  createTechnology: ->
+    new Technology
+
   getTechnologyList: ->
-    return technologyList
+    technologyList
 
   thumbsUp: (technology) ->
-    if technology.thumbsUp?
-      technology.thumbsUp = technology.thumbsUp + 1
-    else
-      technology.thumbsUp = 1
+    technology.thumbsUp = increment technology.thumbsUp
     technology.save()
 
   thumbsDown: (technology) ->
-    if technology.thumbsDown?
-      technology.thumbsDown = technology.thumbsDown + 1
-    else
-      technology.thumbsDown = 1
+    technology.thumbsDown = increment technology.thumbsDown
     technology.save()
