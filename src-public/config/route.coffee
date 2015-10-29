@@ -13,7 +13,7 @@ app.config (
     templateUrl: 'technologyList.html'
     resolve:
       technologyList: (technologyManager) ->
-        return technologyManager.promise
+        technologyManager.promise
   .state 'technology',
     url: '/technology/:id'
     controller: 'TechnologyCtrl'
@@ -23,6 +23,6 @@ app.config (
         return unless $stateParams.id
         Technology.find $stateParams.id
       tagList: (tagManager) ->
-        return tagManager.promise
+        tagManager.promise
 
   $urlRouterProvider.otherwise '/technology'
