@@ -71,3 +71,39 @@ tags-input .tags .tag-item {
 
   a:hover:before{border-color:transparent #555 transparent transparent;}
 }
+
+.panel-heading {
+  position: relative;
+
+  .vote {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 25px;
+
+    .glyphicon {
+      transition: color 0.2s;
+      color: #333;
+
+    }
+    .glyphicon:hover {
+      cursor: pointer;
+    }
+    .glyphicon-thumbs-up:hover {
+      color: #2ca25f;
+    }
+    .glyphicon-thumbs-down:hover {
+      color: #e34a33;
+    }
+    .badge {
+      vertical-align: top;
+      margin-left: 6px;
+      margin-top: 6px;
+    }
+    td {
+      padding-left: 20px;
+    }
+  }
+
+
+}
