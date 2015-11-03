@@ -17,8 +17,7 @@ app.controller 'TechnologyListCtrl', ($scope, technologyManager) ->
     technology.save()
     technology.editing = false
 
-  $scope.thumbsUp = technologyManager.thumbsUp
-  $scope.thumbsDown = technologyManager.thumbsDown
+  $scope.vote = technologyManager.vote
 
   $scope.technologies = technologyManager.getTechnologyList()
 

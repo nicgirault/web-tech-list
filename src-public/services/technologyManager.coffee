@@ -13,10 +13,9 @@ app.service 'technologyManager', (Technology) ->
   getTechnologyList: ->
     technologyList
 
-  thumbsUp: (technology) ->
-    technology.thumbsUp = increment technology.thumbsUp
-    technology.save()
-
-  thumbsDown: (technology) ->
-    technology.thumbsDown = increment technology.thumbsDown
+  vote: (technology, up) ->
+    if up
+      technology.thumbsUp = increment technology.thumbsUp
+    else
+      technology.thumbsDown = increment technology.thumbsDown
     technology.save()
