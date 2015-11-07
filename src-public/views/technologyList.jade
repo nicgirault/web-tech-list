@@ -10,10 +10,10 @@ hr
     table.vote
       tr
         td.thumbsUp
-          span.glyphicon.glyphicon-thumbs-up(ng-click="thumbsUp(technology, true)")
+          span.glyphicon.glyphicon-thumbs-up(ng-click="vote(technology, true)")
           span.badge {{ technology.thumbsUp || 0 }}
         td.thumbsDown
-          span.glyphicon.glyphicon-thumbs-down(ng-click="thumbsDown(technology, false)")
+          span.glyphicon.glyphicon-thumbs-down(ng-click="vote(technology, false)")
           span.badge {{ technology.thumbsDown || 0 }}
   .panel-body
     div
