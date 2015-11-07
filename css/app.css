@@ -6260,3 +6260,6 @@ tags-input .tags .tag-item {
 .panel-heading .vote td {
   padding-left: 20px;
 }
+.logo {
+  max-width: 200px;
+}

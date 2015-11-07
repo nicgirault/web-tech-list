@@ -157,7 +157,7 @@ app.factory('Technology', function(Parse) {
       return Technology.__super__.constructor.apply(this, arguments);
     }
 
-    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown");
+    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown", "logoUrl");
 
     return Technology;
 
