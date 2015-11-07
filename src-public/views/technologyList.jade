@@ -16,6 +16,7 @@ hr
           span.glyphicon.glyphicon-thumbs-down(ng-click="vote(technology, false)")
           span.badge {{ technology.thumbsDown || 0 }}
   .panel-body
+    img.logo(ng-src="{{technology.logoUrl}}")
     div
       ul.tag-cloud
         li(ng-repeat="tag in technology.tags")
