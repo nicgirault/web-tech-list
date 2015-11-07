@@ -6,3 +6,9 @@ tags-input(
   on-tag-adding="addTag($tag)"
   on-tag-removed="save()"
 )
+
+.form-group
+  label Logo Url
+  input.form-control(ng-model="technology.logoUrl" ng-blur="save()")
+
+img(ng-src="{{technology.logoUrl}}")
