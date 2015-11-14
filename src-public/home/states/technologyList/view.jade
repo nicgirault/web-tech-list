@@ -21,9 +21,5 @@ hr
         li(ng-repeat="tag in technology.tags")
           a(href="#") {{ tag.label }}
 
-hr
-form(role="form", ng-submit="addTechnology()")
-  .input-group
-    input.form-control(type="text", ng-model="newTechnology.title", autofocus)
-    span.input-group-btn
-      button.btn.btn-default(type="submit") Add
+.new-technology.btn-round(ui-sref="newTechnology")
+  span.glyphicon.glyphicon-plus

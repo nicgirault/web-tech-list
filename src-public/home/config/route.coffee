@@ -25,5 +25,14 @@ angular.module('home').config (
         Technology.find $stateParams.id
       tagList: (tagManager) ->
         tagManager.promise
+  .state 'newTechnology',
+    url: '/new'
+    controller: 'NewTechnologyCtrl'
+    templateUrl: 'home/states/newTechnology/view.html'
+    resolve:
+      technologyList: (technologyManager) ->
+        technologyManager.promise
+      tagList: (tagManager) ->
+        tagManager.promise
 
   $urlRouterProvider.otherwise '/technology'
