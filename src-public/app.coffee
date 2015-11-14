@@ -13,6 +13,7 @@ app = angular.module 'webTechList', [
   'ngAnimate'
 
   # app modules
+  'home'
   'tag'
 ]
 

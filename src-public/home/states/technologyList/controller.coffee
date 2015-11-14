@@ -1,4 +1,4 @@
-app.controller 'TechnologyListCtrl', ($scope, technologyManager) ->
+angular.module('home').controller 'TechnologyListCtrl', ($scope, technologyManager) ->
 
   $scope.addTechnology = ->
     $scope.newTechnology.save().then (technology) ->
