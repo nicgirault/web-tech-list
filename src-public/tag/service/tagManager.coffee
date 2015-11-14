@@ -1,4 +1,4 @@
-app.service 'tagManager', (Tag) ->
+angular.module('tag').service 'tagManager', (Tag) ->
   tagList = []
   promise = Tag.query().then (_tags) ->
     tagList = _tags

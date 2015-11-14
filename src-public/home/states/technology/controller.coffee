@@ -1,4 +1,4 @@
-app.controller 'TechnologyCtrl', ($scope, technology, tagManager) ->
+angular.module('home').controller 'TechnologyCtrl', ($scope, technology, tagManager) ->
   $scope.technology = technology
   technology.tags = [] unless technology.tags?
 

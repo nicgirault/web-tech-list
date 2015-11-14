@@ -12,6 +12,7 @@ app = angular.module 'webTechList', [
   'ngTagsInput'
 
   # app modules
+  'home'
   'tag'
 ]
 

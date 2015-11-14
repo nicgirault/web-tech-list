@@ -1,4 +1,4 @@
-app.service 'technologyManager', (Technology) ->
+angular.module('home').service 'technologyManager', (Technology) ->
   technologyList = []
   promise = Technology.query().then (_technologies) ->
     technologyList = _technologies
