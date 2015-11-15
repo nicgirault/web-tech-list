@@ -1,5 +1,5 @@
 describe 'technologyManager', ->
-  beforeEach module 'webTechList'
+  beforeEach module 'home'
 
   beforeEach inject (_technologyManager_, _Technology_) ->
     @Technology = _Technology_

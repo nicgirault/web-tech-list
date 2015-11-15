@@ -1,4 +1,4 @@
-angular.module('tag').service 'tagManager', (Tag, $q) ->
+angular.module('tag').service 'TagManager', (Tag, $q) ->
   tagList = []
   promise = Tag.query().then (_tags) ->
     tagList = _tags
@@ -17,7 +17,7 @@ angular.module('tag').service 'tagManager', (Tag, $q) ->
       tagList.push _tag
       return _tag
 
-  loadTags: (query) ->
+  autocomplete: (query) ->
     $q (resolve, reject) ->
       resolve _.filter tagList, (tag) ->
         tag.label.substr(0, query.length).toLowerCase() == query.toLowerCase()

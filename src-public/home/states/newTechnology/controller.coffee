@@ -3,19 +3,19 @@ angular.module('home').controller 'NewTechnologyCtrl', (
   $state,
   technologyList,
   tagList,
-  tagManager,
+  TagManager,
   technologyManager
 ) ->
   $scope.technology = technologyManager.createTechnology()
   $scope.addTag = ($tag) ->
-    tag = tagManager.find $tag.label
+    tag = TagManager.find $tag.label
     if tag?
       $tag.objectId = tag.objectId
     else
-      tagManager.add($tag.label).then (_tag) ->
+      TagManager.add($tag.label).then (_tag) ->
         _.merge $tag, _tag
     true # true because tag is always valid
-  $scope.loadTags = tagManager.loadTags
+  $scope.autocomplete = TagManager.autocomplete
   $scope.save = ->
     $scope.technology.save()
     technologyList.push $scope.technology
