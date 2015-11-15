@@ -25,5 +25,5 @@
         display-property="label"
         on-tag-adding="addTag($tag)"
       )
-        auto-complete(source="loadTags($query)" min-length="1")
+        auto-complete(source="autocomplete($query)" min-length="1")
     button.new-technology-submit.btn.btn-primary(ng-click="save()" ng-disabled="form.$invalid") Save
