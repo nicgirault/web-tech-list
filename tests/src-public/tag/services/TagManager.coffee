@@ -73,3 +73,18 @@ describe 'TagManager', ->
         expect(returnedTags).to.include label: 'search'
         done()
       @rootScope.$apply()
+
+  describe 'filterByTags', ->
+    it 'should remove all technologies without the defined tag', ->
+      filteredTechnologyList = @TagManager.filterByTags 'SAAS', technologyListFixtures
+      expect(filteredTechnologyList.length).to.be.equal 3
+      titles = (technology.title for technology in filteredTechnologyList)
+      expect(titles).to.include 'Parse'
+      expect(titles).to.include 'Intercom'
+      expect(titles).to.include 'Algolia'
+
+    it 'should remove all technologies without the defined tags', ->
+      filteredTechnologyList = @TagManager.filterByTags ['SAAS', 'API'], technologyListFixtures
+      titles = (technology.title for technology in filteredTechnologyList)
+      expect(filteredTechnologyList.length).to.be.equal 1
+      expect(titles).to.include 'Parse'

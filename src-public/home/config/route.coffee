@@ -8,12 +8,12 @@ angular.module('home').config (
 
   $stateProvider
   .state 'technologyList',
-    url: '/technology'
+    url: '/technology?tag'
     controller: 'TechnologyListCtrl'
     templateUrl: 'home/states/technologyList/view.html'
     resolve:
-      technologyList: (technologyManager) ->
-        technologyManager.promise
+      technologyList: (TechnologyManager) ->
+        TechnologyManager.promise
   .state 'technology',
     url: '/technology/:id'
     controller: 'TechnologyCtrl'
@@ -29,8 +29,8 @@ angular.module('home').config (
     controller: 'NewTechnologyCtrl'
     templateUrl: 'home/states/newTechnology/view.html'
     resolve:
-      technologyList: (technologyManager) ->
-        technologyManager.promise
+      technologyList: (TechnologyManager) ->
+        TechnologyManager.promise
       tagList: (TagManager) ->
         TagManager.promise
 

@@ -1,9 +1,8 @@
-angular.module('home').controller 'TechnologyListCtrl', ($scope, technologyManager) ->
-
+angular.module('home').controller 'TechnologyListCtrl', ($scope, TechnologyManager; $stateParams) ->
   $scope.addTechnology = ->
     $scope.newTechnology.save().then (technology) ->
       $scope.technologies.push technology
-    $scope.newTechnology = technologyManager.createTechnology()
+    $scope.newTechnology = TechnologyManager.createTechnology()
 
   $scope.removeTechnology = (technology) ->
     technology.destroy().then () ->
@@ -17,8 +16,10 @@ angular.module('home').controller 'TechnologyListCtrl', ($scope, technologyManag
     technology.save()
     technology.editing = false
 
-  $scope.vote = technologyManager.vote
+  $scope.vote = TechnologyManager.vote
 
-  $scope.technologies = technologyManager.getTechnologyList()
+  $scope.selectedTags = if _.isArray $stateParams.tag then $stateParams.tag else [$stateParams.tag]
 
-  $scope.newTechnology = technologyManager.createTechnology()
+  $scope.technologies = TechnologyManager.getTechnologyList $stateParams
+
+  $scope.newTechnology = TechnologyManager.createTechnology()

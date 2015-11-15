@@ -1,4 +1,4 @@
-angular.module('home').service 'technologyManager', (Technology) ->
+angular.module('home').service 'TechnologyManager', (Technology, TagManager) ->
   technologyList = []
   promise = Technology.query().then (_technologies) ->
     technologyList = _technologies
@@ -10,8 +10,11 @@ angular.module('home').service 'technologyManager', (Technology) ->
   createTechnology: ->
     new Technology
 
-  getTechnologyList: ->
-    technologyList
+  getTechnologyList: (filters) ->
+    filteredTechnologyList = technologyList
+    if filters?.tag?
+      result = TagManager.filterByTags filters.tag, filteredTechnologyList
+    filteredTechnologyList
 
   vote: (technology, up) ->
     if up

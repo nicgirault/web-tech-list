@@ -4,9 +4,9 @@ angular.module('home').controller 'NewTechnologyCtrl', (
   technologyList,
   tagList,
   TagManager,
-  technologyManager
+  TechnologyManager
 ) ->
-  $scope.technology = technologyManager.createTechnology()
+  $scope.technology = TechnologyManager.createTechnology()
   $scope.addTag = ($tag) ->
     tag = TagManager.find $tag.label
     if tag?

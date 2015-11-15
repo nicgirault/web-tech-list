@@ -19,8 +19,13 @@ hr
     img.logo(ng-src="{{technology.logoUrl}}")
     div
       ul.tag-cloud
-        li(ng-repeat="tag in technology.tags")
-          a(href="#") {{ tag.label }}
+        li(
+          ng-repeat="tag in technology.tags"
+        )
+          a(
+            ui-sref="technologyList({tag: tag.label})"
+            ng-class="{'highlight': selectedTags.indexOf(tag.label) > -1}"
+          ) {{ tag.label }}
 
 .new-technology.btn-round(ui-sref="newTechnology")
   span.glyphicon.glyphicon-plus

@@ -1,7 +1,7 @@
-angular.module('home').directive 'technologyBlacklist', (technologyManager) ->
+angular.module('home').directive 'technologyBlacklist', (TechnologyManager) ->
   require: 'ngModel'
   link: (scope, elem, attr, ngModel) ->
-    technologyList = technologyManager.getTechnologyList()
+    technologyList = TechnologyManager.getTechnologyList()
     ngModel.$parsers.unshift (value) ->
       valid = _.findIndex(technologyList, title: value) == -1
       ngModel.$setValidity 'technology-blacklist', valid
