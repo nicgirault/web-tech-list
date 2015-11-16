@@ -1,14 +1,17 @@
-h1 {{ technology.title }}
+.row
+  .col-xs-12.record
+    h2 {{ technology.title }}
+      .close.pull-right.fa.fa-close(ui-sref='technologies')
 
-tags-input(
-  ng-model="technology.tags"
-  display-property="label"
-  on-tag-adding="addTag($tag)"
-  on-tag-removed="save()"
-)
+    tags-input(
+      ng-model="technology.tags"
+      display-property="label"
+      on-tag-adding="addTag($tag)"
+      on-tag-removed="save()"
+    )
 
-.form-group
-  label Logo Url
-  input.form-control(ng-model="technology.logoUrl" ng-blur="save()")
+    .form-group
+      label Logo Url
+      input.form-control(ng-model="technology.logoUrl" ng-blur="save()")
 
-img(ng-src="{{technology.logoUrl}}")
+    img(ng-src="{{technology.logoUrl}}")

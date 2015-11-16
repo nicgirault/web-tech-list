@@ -1,0 +1,9 @@
+h1.text-center List of web technologies
+hr
+
+.container
+  .row
+    expanding-box(
+      ng-repeat="technology in technologies | filterByTags:tags"
+      technology="technology"
+    )
