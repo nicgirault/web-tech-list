@@ -7,10 +7,10 @@ app.config (
   $locationProvider.hashPrefix '!'
 
   $stateProvider
-  .state 'technologyList',
+  .state 'technologies',
     url: '/technology'
+    templateUrl: 'technologies.html'
     controller: 'TechnologyListCtrl'
-    templateUrl: 'technologyList.html'
     resolve:
       technologyList: (technologyManager) ->
         technologyManager.promise

@@ -2,3 +2,5 @@ node_modules/
 bower_components/
 public/
 cloud/
+.DS_Store
+npm-debug.log
