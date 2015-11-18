@@ -1,7 +1,7 @@
 'use strict';
 var app;
 
-app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics', 'ngTagsInput']);
+app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics', 'ngTagsInput', 'ngMessages', 'home', 'tag']);
 
 app.run(function($rootScope, $state) {
   return $rootScope.$state = $state;
@@ -9,85 +9,6 @@ app.run(function($rootScope, $state) {
 
 app.config(function(ParseProvider) {
   return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
-});
-
-app.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
-  $locationProvider.hashPrefix('!');
-  $stateProvider.state('technologyList', {
-    url: '/technology',
-    controller: 'TechnologyListCtrl',
-    templateUrl: 'technologyList.html',
-    resolve: {
-      technologyList: function(technologyManager) {
-        return technologyManager.promise;
-      }
-    }
-  }).state('technology', {
-    url: '/technology/:id',
-    controller: 'TechnologyCtrl',
-    templateUrl: 'technology.html',
-    resolve: {
-      technology: function(Technology, tagManager, $stateParams) {
-        if (!$stateParams.id) {
-          return;
-        }
-        return Technology.find($stateParams.id);
-      },
-      tagList: function(tagManager) {
-        return tagManager.promise;
-      }
-    }
-  });
-  return $urlRouterProvider.otherwise('/technology');
-});
-
-app.controller('TechnologyCtrl', function($scope, technology, tagManager) {
-  $scope.technology = technology;
-  if (technology.tags == null) {
-    technology.tags = [];
-  }
-  $scope.addTag = function($tag) {
-    var tag;
-    tag = tagManager.find($tag.label);
-    if (tag != null) {
-      $tag.objectId = tag.objectId;
-    } else {
-      tagManager.add($tag.label).then(function(_tag) {
-        return _.merge($tag, _tag);
-      });
-    }
-    technology.save();
-    return true;
-  };
-  return $scope.save = function() {
-    return technology.save();
-  };
-});
-
-app.controller('TechnologyListCtrl', function($scope, technologyManager) {
-  $scope.addTechnology = function() {
-    $scope.newTechnology.save().then(function(technology) {
-      return $scope.technologies.push(technology);
-    });
-    return $scope.newTechnology = technologyManager.createTechnology();
-  };
-  $scope.removeTechnology = function(technology) {
-    return technology.destroy().then(function() {
-      return _.remove($scope.technologies, function(technology) {
-        return technology.objectId === null;
-      });
-    });
-  };
-  $scope.editingTechnology = function(technology) {
-    return technology.editing = true;
-  };
-  $scope.editTechnology = function(technology) {
-    technology.save();
-    return technology.editing = false;
-  };
-  $scope.vote = technologyManager.vote;
-  $scope.technologies = technologyManager.getTechnologyList();
-  return $scope.newTechnology = technologyManager.createTechnology();
 });
 
 app.filter('filterByTags', function() {
@@ -126,29 +47,14 @@ app.filter('filterByTags', function() {
   };
 });
 
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+angular.module('home', ['ng', 'ui.router', 'Parse', 'tag', 'ngMessages']);
 
-app.factory('Tag', function(Parse) {
-  var Tag;
-  return Tag = (function(_super) {
-    __extends(Tag, _super);
-
-    function Tag() {
-      return Tag.__super__.constructor.apply(this, arguments);
-    }
-
-    Tag.configure("Tag", "label");
-
-    return Tag;
-
-  })(Parse.Model);
-});
+angular.module('tag', ['ng', 'Parse']);
 
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-app.factory('Technology', function(Parse) {
+angular.module('home').factory('Technology', function(Parse) {
   var Technology;
   return Technology = (function(_super) {
     __extends(Technology, _super);
@@ -164,7 +70,65 @@ app.factory('Technology', function(Parse) {
   })(Parse.Model);
 });
 
-app.service('tagManager', function(Tag) {
+angular.module('home').service('TechnologyManager', function(Technology, TagManager) {
+  var increment, promise, technologyList;
+  technologyList = [];
+  promise = Technology.query().then(function(_technologies) {
+    return technologyList = _technologies;
+  });
+  increment = function(value) {
+    if (value != null) {
+      return value + 1;
+    } else {
+      return 1;
+    }
+  };
+  return {
+    promise: promise,
+    createTechnology: function() {
+      return new Technology;
+    },
+    getTechnologyList: function(filters) {
+      var filteredTechnologyList, result;
+      filteredTechnologyList = technologyList;
+      if ((filters != null ? filters.tag : void 0) != null) {
+        result = TagManager.filterByTags(filters.tag, filteredTechnologyList);
+      }
+      return filteredTechnologyList;
+    },
+    vote: function(technology, up) {
+      if (up) {
+        technology.thumbsUp = increment(technology.thumbsUp);
+      } else {
+        technology.thumbsDown = increment(technology.thumbsDown);
+      }
+      return technology.save();
+    }
+  };
+});
+
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+angular.module('tag').factory('Tag', function(Parse) {
+  var Tag;
+  return Tag = (function(_super) {
+    __extends(Tag, _super);
+
+    function Tag() {
+      return Tag.__super__.constructor.apply(this, arguments);
+    }
+
+    Tag.configure("Tag", "label");
+
+    return Tag;
+
+  })(Parse.Model);
+});
+
+var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+angular.module('tag').service('TagManager', function(Tag, $q) {
   var promise, tagList;
   tagList = [];
   promise = Tag.query().then(function(_tags) {
@@ -189,38 +153,175 @@ app.service('tagManager', function(Tag) {
         tagList.push(_tag);
         return _tag;
       });
+    },
+    autocomplete: function(query) {
+      return $q(function(resolve, reject) {
+        return resolve(_.filter(tagList, function(tag) {
+          return tag.label.substr(0, query.length).toLowerCase() === query.toLowerCase();
+        }));
+      });
+    },
+    filterByTags: function(requiredTags, technologyList) {
+      if (!_.isArray(requiredTags)) {
+        requiredTags = [requiredTags];
+      }
+      return _.filter(technologyList, function(technology) {
+        return _.every(requiredTags, function(requiredTag) {
+          var tag;
+          return __indexOf.call((function() {
+            var _i, _len, _ref, _results;
+            _ref = technology.tags;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              tag = _ref[_i];
+              _results.push(tag.label);
+            }
+            return _results;
+          })(), requiredTag) >= 0;
+        });
+      });
     }
   };
 });
 
-app.service('technologyManager', function(Technology) {
-  var increment, promise, technologyList;
-  technologyList = [];
-  promise = Technology.query().then(function(_technologies) {
-    return technologyList = _technologies;
-  });
-  increment = function(value) {
-    if (value != null) {
-      return value + 1;
-    } else {
-      return 1;
-    }
-  };
-  return {
-    promise: promise,
-    createTechnology: function() {
-      return new Technology;
-    },
-    getTechnologyList: function() {
-      return technologyList;
-    },
-    vote: function(technology, up) {
-      if (up) {
-        technology.thumbsUp = increment(technology.thumbsUp);
-      } else {
-        technology.thumbsDown = increment(technology.thumbsDown);
+angular.module('home').config(function($locationProvider, $stateProvider, $urlRouterProvider) {
+  $locationProvider.hashPrefix('!');
+  $stateProvider.state('technologyList', {
+    url: '/technology?tag',
+    controller: 'TechnologyListCtrl',
+    templateUrl: 'home/states/technologyList/view.html',
+    resolve: {
+      technologyList: function(TechnologyManager) {
+        return TechnologyManager.promise;
       }
-      return technology.save();
+    }
+  }).state('technology', {
+    url: '/technology/:id',
+    controller: 'TechnologyCtrl',
+    templateUrl: 'home/states/technology/view.html',
+    resolve: {
+      technology: function(Technology, TagManager, $stateParams) {
+        if (!$stateParams.id) {
+          return;
+        }
+        return Technology.find($stateParams.id);
+      },
+      tagList: function(TagManager) {
+        return TagManager.promise;
+      }
+    }
+  }).state('newTechnology', {
+    url: '/new',
+    controller: 'NewTechnologyCtrl',
+    templateUrl: 'home/states/newTechnology/view.html',
+    resolve: {
+      technologyList: function(TechnologyManager) {
+        return TechnologyManager.promise;
+      },
+      tagList: function(TagManager) {
+        return TagManager.promise;
+      }
+    }
+  });
+  return $urlRouterProvider.otherwise('/technology');
+});
+
+angular.module('home').directive('technologyBlacklist', function(TechnologyManager) {
+  return {
+    require: 'ngModel',
+    link: function(scope, elem, attr, ngModel) {
+      var technologyList;
+      technologyList = TechnologyManager.getTechnologyList();
+      ngModel.$parsers.unshift(function(value) {
+        var valid;
+        valid = _.findIndex(technologyList, {
+          title: value
+        }) === -1;
+        ngModel.$setValidity('technology-blacklist', valid);
+        if (valid) {
+          return value;
+        } else {
+          return void 0;
+        }
+      });
+      ngModel.$formatters.unshift(function(value) {
+        ngModel.$setValidity('technology-blacklist', _.findIndex(technologyList, {
+          title: value
+        }) === -1);
+        return value;
+      });
     }
   };
+});
+
+angular.module('home').controller('NewTechnologyCtrl', function($scope, $state, technologyList, tagList, TagManager, TechnologyManager) {
+  $scope.technology = TechnologyManager.createTechnology();
+  $scope.addTag = function($tag) {
+    var tag;
+    tag = TagManager.find($tag.label);
+    if (tag != null) {
+      $tag.objectId = tag.objectId;
+    } else {
+      TagManager.add($tag.label).then(function(_tag) {
+        return _.merge($tag, _tag);
+      });
+    }
+    return true;
+  };
+  $scope.autocomplete = TagManager.autocomplete;
+  return $scope.save = function() {
+    $scope.technology.save();
+    technologyList.push($scope.technology);
+    return $state.go('technologyList');
+  };
+});
+
+angular.module('home').controller('TechnologyCtrl', function($scope, technology, TagManager) {
+  $scope.technology = technology;
+  if (technology.tags == null) {
+    technology.tags = [];
+  }
+  $scope.addTag = function($tag) {
+    var tag;
+    tag = TagManager.find($tag.label);
+    if (tag != null) {
+      $tag.objectId = tag.objectId;
+    } else {
+      TagManager.add($tag.label).then(function(_tag) {
+        return _.merge($tag, _tag);
+      });
+    }
+    technology.save();
+    return true;
+  };
+  return $scope.save = function() {
+    return technology.save();
+  };
+});
+
+angular.module('home').controller('TechnologyListCtrl', function($scope, TechnologyManager, $stateParams) {
+  $scope.addTechnology = function() {
+    $scope.newTechnology.save().then(function(technology) {
+      return $scope.technologies.push(technology);
+    });
+    return $scope.newTechnology = TechnologyManager.createTechnology();
+  };
+  $scope.removeTechnology = function(technology) {
+    return technology.destroy().then(function() {
+      return _.remove($scope.technologies, function(technology) {
+        return technology.objectId === null;
+      });
+    });
+  };
+  $scope.editingTechnology = function(technology) {
+    return technology.editing = true;
+  };
+  $scope.editTechnology = function(technology) {
+    technology.save();
+    return technology.editing = false;
+  };
+  $scope.vote = TechnologyManager.vote;
+  $scope.selectedTags = _.isArray($stateParams.tag) ? $stateParams.tag : [$stateParams.tag];
+  $scope.technologies = TechnologyManager.getTechnologyList($stateParams);
+  return $scope.newTechnology = TechnologyManager.createTechnology();
 });
