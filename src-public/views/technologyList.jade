@@ -1,0 +1,29 @@
+h1 List of web technologies
+
+input.form-control(type="text" ng-model="tags")
+
+hr
+.panel.panel-default(ng-repeat="technology in technologies | filterByTags:tags")
+  .panel-heading
+    h4
+      a(ui-sref="technology({id: technology.objectId})") {{ technology.title }}
+    table.vote
+      tr
+        td.thumbsUp
+          span.glyphicon.glyphicon-thumbs-up(ng-click="vote(technology, true)")
+          span.badge {{ technology.thumbsUp || 0 }}
+        td.thumbsDown
+          span.glyphicon.glyphicon-thumbs-down(ng-click="vote(technology, false)")
+          span.badge {{ technology.thumbsDown || 0 }}
+  .panel-body
+    div
+      ul.tag-cloud
+        li(ng-repeat="tag in technology.tags")
+          a(href="#") {{ tag.label }}
+
+hr
+form(role="form", ng-submit="addTechnology()")
+  .input-group
+    input.form-control(type="text", ng-model="newTechnology.title", autofocus)
+    span.input-group-btn
+      button.btn.btn-default(type="submit") Add
