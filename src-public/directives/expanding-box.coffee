@@ -35,7 +35,6 @@ app.directive 'expandingBox', ($timeout, $state) ->
 
       newBox.empty()
       newBox.removeClass 'col-xs-2'
-      newBox.addClass 'col-xs-12'
       newBox.css "background", "#fff"
       newBox.css "border", "none"
       newBox.css "box-shadow", "none"
@@ -45,14 +44,10 @@ app.directive 'expandingBox', ($timeout, $state) ->
       newBox.css "left", "#{boxLeftOffset-margin}px";
       newBox.css "top", "#{boxTopOffset-margin}px";
 
-      newBox.css "z-index", "100"
-      newBox.css "border", "none"
       newBox.css "width", "#{bodyWidth}px"
       newBox.css "height", "#{bodyHeight}px"
       newBox.css "transform", "translate(#{-leftTranslation}px,#{-topTranslation}px)"
       newBox.css "transition","all 1s"
 
-      # we must wait for animation to end before changing state (maybe there is a better solution)
-      $timeout ( ->
+      newBox.on 'transitionend', ->
         $state.go 'technology', id: scope.technology.objectId
-      ), 700
