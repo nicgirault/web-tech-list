@@ -7,61 +7,6 @@ app.run(function($rootScope, $state) {
   return $rootScope.$state = $state;
 });
 
-app.directive('expandingBox', function($timeout, $state) {
-  return {
-    restrict: 'E',
-    templateUrl: 'expanding-box.html',
-    scope: {
-      technology: '='
-    },
-    link: function(scope, element, attrs) {
-      var box;
-      box = element.children();
-      box.css('background', "url('" + scope.technology.logoUrl + "') no-repeat center");
-      box.css('background-size', "150px");
-      return element.on('click', function(event) {
-        var body, bodyHeight, bodyWidth, boxHeight, boxLeftOffset, boxTopOffset, boxWidth, leftTranslation, margin, newBox, parent, parentOffsetLeft, parentOffsetTop, topTranslation;
-        box = element.children();
-        newBox = box.clone();
-        boxWidth = box.prop('offsetWidth');
-        boxHeight = box.prop('offsetHeight');
-        boxLeftOffset = box.prop('offsetLeft');
-        boxTopOffset = box.prop('offsetTop');
-        margin = 5;
-        parent = element.parent();
-        parent.append(newBox);
-        body = angular.element(document).find('body');
-        bodyWidth = body.prop('offsetWidth');
-        bodyHeight = body.prop('offsetHeight');
-        parentOffsetLeft = parent.prop('offsetLeft');
-        parentOffsetTop = parent.prop('offsetTop');
-        leftTranslation = boxLeftOffset;
-        topTranslation = boxTopOffset;
-        box.css("border", "none");
-        box.css("box-shadow", "none");
-        newBox.empty();
-        newBox.removeClass('col-xs-2');
-        newBox.css("background", "#fff");
-        newBox.css("border", "none");
-        newBox.css("box-shadow", "none");
-        newBox.css("z-index", "100");
-        newBox.css("position", "absolute");
-        newBox.css("left", "" + (boxLeftOffset - margin) + "px");
-        newBox.css("top", "" + (boxTopOffset - margin) + "px");
-        newBox.css("width", "" + bodyWidth + "px");
-        newBox.css("height", "" + bodyHeight + "px");
-        newBox.css("transform", "translate(" + (-leftTranslation) + "px," + (-topTranslation) + "px)");
-        newBox.css("transition", "all 1s");
-        return newBox.on('transitionend', function() {
-          return $state.go('technology', {
-            id: scope.technology.objectId
-          });
-        });
-      });
-    }
-  };
-});
-
 app.config(function(ParseProvider) {
   return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
 });
@@ -145,6 +90,61 @@ app.controller('TechnologyListCtrl', function($scope, technologyManager) {
   return $scope.newTechnology = technologyManager.createTechnology();
 });
 
+app.directive('expandingBox', function($timeout, $state) {
+  return {
+    restrict: 'E',
+    templateUrl: 'expanding-box.html',
+    scope: {
+      technology: '='
+    },
+    link: function(scope, element, attrs) {
+      var box;
+      box = element.children();
+      box.css('background', "url('" + scope.technology.logoUrl + "') no-repeat center");
+      box.css('background-size', "150px");
+      return element.on('click', function(event) {
+        var body, bodyHeight, bodyWidth, boxHeight, boxLeftOffset, boxTopOffset, boxWidth, leftTranslation, margin, newBox, parent, parentOffsetLeft, parentOffsetTop, topTranslation;
+        box = element.children();
+        newBox = box.clone();
+        boxWidth = box.prop('offsetWidth');
+        boxHeight = box.prop('offsetHeight');
+        boxLeftOffset = box.prop('offsetLeft');
+        boxTopOffset = box.prop('offsetTop');
+        margin = 5;
+        parent = element.parent();
+        parent.append(newBox);
+        body = angular.element(document).find('body');
+        bodyWidth = body.prop('offsetWidth');
+        bodyHeight = body.prop('offsetHeight');
+        parentOffsetLeft = parent.prop('offsetLeft');
+        parentOffsetTop = parent.prop('offsetTop');
+        leftTranslation = boxLeftOffset;
+        topTranslation = boxTopOffset;
+        box.css("border", "none");
+        box.css("box-shadow", "none");
+        newBox.empty();
+        newBox.removeClass('col-xs-2');
+        newBox.css("background", "#fff");
+        newBox.css("border", "none");
+        newBox.css("box-shadow", "none");
+        newBox.css("z-index", "100");
+        newBox.css("position", "absolute");
+        newBox.css("left", "" + (boxLeftOffset - margin) + "px");
+        newBox.css("top", "" + (boxTopOffset - margin) + "px");
+        newBox.css("width", "" + bodyWidth + "px");
+        newBox.css("height", "" + bodyHeight + "px");
+        newBox.css("transform", "translate(" + (-leftTranslation) + "px," + (-topTranslation) + "px)");
+        newBox.css("transition", "all 1s");
+        return newBox.on('transitionend', function() {
+          return $state.go('technology', {
+            id: scope.technology.objectId
+          });
+        });
+      });
+    }
+  };
+});
+
 app.filter('filterByTags', function() {
   return function(technologies, query) {
     var filtered, tags;
@@ -179,6 +179,44 @@ app.filter('filterByTags', function() {
     });
     return filtered;
   };
+});
+
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+app.factory('Tag', function(Parse) {
+  var Tag;
+  return Tag = (function(_super) {
+    __extends(Tag, _super);
+
+    function Tag() {
+      return Tag.__super__.constructor.apply(this, arguments);
+    }
+
+    Tag.configure("Tag", "label");
+
+    return Tag;
+
+  })(Parse.Model);
+});
+
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+app.factory('Technology', function(Parse) {
+  var Technology;
+  return Technology = (function(_super) {
+    __extends(Technology, _super);
+
+    function Technology() {
+      return Technology.__super__.constructor.apply(this, arguments);
+    }
+
+    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown");
+
+    return Technology;
+
+  })(Parse.Model);
 });
 
 app.service('tagManager', function(Tag) {
@@ -240,42 +278,4 @@ app.service('technologyManager', function(Technology) {
       return technology.save();
     }
   };
-});
-
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-app.factory('Tag', function(Parse) {
-  var Tag;
-  return Tag = (function(_super) {
-    __extends(Tag, _super);
-
-    function Tag() {
-      return Tag.__super__.constructor.apply(this, arguments);
-    }
-
-    Tag.configure("Tag", "label");
-
-    return Tag;
-
-  })(Parse.Model);
-});
-
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-app.factory('Technology', function(Parse) {
-  var Technology;
-  return Technology = (function(_super) {
-    __extends(Technology, _super);
-
-    function Technology() {
-      return Technology.__super__.constructor.apply(this, arguments);
-    }
-
-    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown");
-
-    return Technology;
-
-  })(Parse.Model);
 });
