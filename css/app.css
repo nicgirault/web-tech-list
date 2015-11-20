@@ -6163,102 +6163,49 @@ button.close {
     display: none !important;
   }
 }
+body {
+  background: #f0f0f0;
+}
+.logo {
+  object-fit: cover;
+  width: 80%;
+  max-height: 100%;
+  margin: auto;
+}
 tags-input .tags {
   border-radius: 5px;
 }
 tags-input .tags .tag-item {
   background: none;
 }
-.tag-cloud {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.tag-cloud li,
-.tag-cloud a {
-  float: left;
-  height: 24px;
-  line-height: 24px;
-  position: relative;
-  font-size: 11px;
-}
-.tag-cloud a {
-  box-shadow: 2px 2px 2px #222;
-  margin-left: 20px;
-  padding: 0 10px 0 12px;
-  background: #0089e0;
-  color: #fff;
-  text-decoration: none;
-  -moz-border-radius-bottomright: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  -moz-border-radius-topright: 4px;
-  -webkit-border-top-right-radius: 4px;
-  border-top-right-radius: 4px;
-}
-.tag-cloud a:before {
-  content: "";
-  float: left;
-  position: absolute;
-  top: 0;
-  left: -12px;
-  width: 0;
-  height: 0;
-  border-color: transparent #0089e0 transparent transparent;
-  border-style: solid;
-  border-width: 12px 12px 12px 0;
-}
-.tag-cloud a:after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 0;
-  float: left;
-  width: 4px;
-  height: 4px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  background: #fff;
-  -moz-box-shadow: -1px -1px 2px #004977;
-  -webkit-box-shadow: -1px -1px 2px #004977;
-  box-shadow: -1px -1px 2px #004977;
-}
-.tag-cloud a:hover {
-  background: #555;
-}
-.tag-cloud a:hover:before {
-  border-color: transparent #555 transparent transparent;
-}
-.panel-heading {
-  position: relative;
-}
-.panel-heading .vote {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 25px;
-}
-.panel-heading .vote .glyphicon {
-  transition: color 0.2s;
-  color: #333;
-}
-.panel-heading .vote .glyphicon:hover {
+.panel {
+  height: 200px;
+  margin: 5px;
+  padding: 5px;
   cursor: pointer;
+  border-radius: 0;
+  background: #fff;
+  overflow: hidden;
 }
-.panel-heading .vote .glyphicon-thumbs-up:hover {
-  color: #2ca25f;
+.panel::before {
+  border: 1px solid rgba(74, 74, 74, 0.1);
 }
-.panel-heading .vote .glyphicon-thumbs-down:hover {
-  color: #e34a33;
+.panel:hover {
+  padding: 3px;
+  border: 3px solid rgba(129, 196, 131, 0.5);
 }
-.panel-heading .vote .badge {
-  vertical-align: top;
-  margin-left: 6px;
-  margin-top: 6px;
+.panel-default .panel-heading {
+  background-color: rgba(20, 20, 20, 0.3);
+  border: none;
+  border-radius: initial;
+  text-align: center;
+  color: white;
+  padding: 4px;
 }
-.panel-heading .vote td {
-  padding-left: 20px;
+.panel-default .panel-heading h4 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .logo {
   max-width: 200px;

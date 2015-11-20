@@ -1,29 +1,24 @@
 'use strict';
 var app;
 
-app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics', 'ngTagsInput', 'ngMessages', 'home', 'tag']);
+app = angular.module('webTechList', ['ng', 'ngResource', 'ui.router', 'ui.bootstrap', 'app.templates', 'Parse', 'angulartics', 'angulartics.google.analytics', 'ngTagsInput', 'ngAnimate', 'ngMessages', 'home', 'tag']);
 
 app.run(function($rootScope, $state) {
   return $rootScope.$state = $state;
 });
 
-app.config(function(ParseProvider) {
-  return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
-});
-
 app.filter('filterByTags', function() {
   return function(technologies, query) {
-    var filtered, tags;
+    var tags;
     if (!query) {
       return technologies;
     }
     tags = query.toLowerCase().split(" ");
-    filtered = [];
     if (technologies == null) {
       technologies = [];
     }
-    technologies.forEach(function(technology) {
-      var matches, tag, technologyTags;
+    return _.filter(technologies, function(technology) {
+      var tag, technologyTags;
       technologyTags = (function() {
         var _i, _len, _ref, _results;
         _ref = technology.tags || [];
@@ -34,27 +29,47 @@ app.filter('filterByTags', function() {
         }
         return _results;
       })();
-      matches = tags.every(function(tag) {
-        return _.findIndex(technologyTags, function(technologyTag) {
-          return technologyTag.substr(0, tag.length).toLowerCase() === tag;
-        }) > -1 || technology.title.substr(0, tag.length).toLowerCase() === tag;
+      technologyTags = technologyTags.join(',').toLowerCase();
+      return _.any(tags, function(tag) {
+        var _ref;
+        return _.contains(technologyTags, tag) || _.contains(technology != null ? (_ref = technology.title) != null ? _ref.toLowerCase() : void 0 : void 0, tag);
       });
-      if (matches) {
-        return filtered.push(technology);
-      }
     });
-    return filtered;
   };
+});
+
+app.config(function(ParseProvider) {
+  return ParseProvider.initialize("OhtVXqe3mdDgUi5ugPK7uyQLekZCeZnXQQagb8dY", "G20uNaG0lAvRZ84PLdDB9gnTmtFCTEfwztixPmwp");
 });
 
 angular.module('home', ['ng', 'ui.router', 'Parse', 'tag', 'ngMessages']);
 
 angular.module('tag', ['ng', 'Parse']);
 
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+angular.module('home').factory('Technology', function(Parse) {
+  var Technology;
+  return Technology = (function(_super) {
+    __extends(Technology, _super);
+
+    function Technology() {
+      return Technology.__super__.constructor.apply(this, arguments);
+    }
+
+    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown", "logoUrl");
+
+    return Technology;
+
+  })(Parse.Model);
+});
+
 angular.module('home').config(function($locationProvider, $stateProvider, $urlRouterProvider) {
   $locationProvider.hashPrefix('!');
-  $stateProvider.state('technologyList', {
+  $stateProvider.state('technologies', {
     url: '/technology',
+    templateUrl: 'technologies.html',
     controller: 'TechnologyListCtrl',
     templateUrl: 'home/states/technologyList/view.html',
     resolve: {
@@ -93,25 +108,6 @@ angular.module('home').config(function($locationProvider, $stateProvider, $urlRo
   return $urlRouterProvider.otherwise('/technology');
 });
 
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-angular.module('home').factory('Technology', function(Parse) {
-  var Technology;
-  return Technology = (function(_super) {
-    __extends(Technology, _super);
-
-    function Technology() {
-      return Technology.__super__.constructor.apply(this, arguments);
-    }
-
-    Technology.configure("Technology", "title", "tags", "thumbsUp", "thumbsDown", "logoUrl");
-
-    return Technology;
-
-  })(Parse.Model);
-});
-
 angular.module('home').service('technologyManager', function(Technology) {
   var increment, promise, technologyList;
   technologyList = [];
@@ -142,25 +138,6 @@ angular.module('home').service('technologyManager', function(Technology) {
       return technology.save();
     }
   };
-});
-
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-angular.module('tag').factory('Tag', function(Parse) {
-  var Tag;
-  return Tag = (function(_super) {
-    __extends(Tag, _super);
-
-    function Tag() {
-      return Tag.__super__.constructor.apply(this, arguments);
-    }
-
-    Tag.configure("Tag", "label");
-
-    return Tag;
-
-  })(Parse.Model);
 });
 
 angular.module('tag').service('TagManager', function(Tag, $q) {
@@ -199,6 +176,25 @@ angular.module('tag').service('TagManager', function(Tag, $q) {
   };
 });
 
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+angular.module('tag').factory('Tag', function(Parse) {
+  var Tag;
+  return Tag = (function(_super) {
+    __extends(Tag, _super);
+
+    function Tag() {
+      return Tag.__super__.constructor.apply(this, arguments);
+    }
+
+    Tag.configure("Tag", "label");
+
+    return Tag;
+
+  })(Parse.Model);
+});
+
 angular.module('home').directive('technologyBlacklist', function(technologyManager) {
   return {
     require: 'ngModel',
@@ -227,6 +223,59 @@ angular.module('home').directive('technologyBlacklist', function(technologyManag
   };
 });
 
+angular.module('home').directive('expandingBox', function($timeout, $state) {
+  return {
+    restrict: 'E',
+    templateUrl: 'home/directives/expanding-box/expanding-box.html',
+    scope: {
+      technology: '='
+    },
+    link: function(scope, element, attrs) {
+      var box;
+      box = element.children();
+      return element.on('click', function(event) {
+        var body, bodyHeight, bodyWidth, boxHeight, boxLeftOffset, boxTopOffset, boxWidth, leftTranslation, margin, newBox, parent, parentOffsetLeft, parentOffsetTop, topTranslation;
+        box = element.children();
+        newBox = box.clone();
+        boxWidth = box.prop('offsetWidth');
+        boxHeight = box.prop('offsetHeight');
+        boxLeftOffset = box.prop('offsetLeft');
+        boxTopOffset = box.prop('offsetTop');
+        margin = 5;
+        parent = element.parent();
+        parent.append(newBox);
+        body = angular.element(document).find('body');
+        bodyWidth = body.prop('offsetWidth');
+        bodyHeight = body.prop('offsetHeight');
+        parentOffsetLeft = parent.prop('offsetLeft');
+        parentOffsetTop = parent.prop('offsetTop');
+        leftTranslation = boxLeftOffset;
+        topTranslation = boxTopOffset;
+        box.css("border", "none");
+        box.css("box-shadow", "none");
+        newBox.empty();
+        newBox.removeClass('col-xs-2');
+        newBox.css("background", "#fff");
+        newBox.css("border", "none");
+        newBox.css("box-shadow", "none");
+        newBox.css("z-index", "100");
+        newBox.css("position", "absolute");
+        newBox.css("left", "" + (boxLeftOffset - margin) + "px");
+        newBox.css("top", "" + (boxTopOffset - margin) + "px");
+        newBox.css("width", "" + bodyWidth + "px");
+        newBox.css("height", "" + bodyHeight + "px");
+        newBox.css("transform", "translate(" + (-leftTranslation) + "px," + (-topTranslation) + "px)");
+        newBox.css("transition", "width 0.5s, height 0.5s, position 0.5s, transform 0.5s");
+        return newBox.one('transitionend', function() {
+          return $state.go('technology', {
+            id: scope.technology.objectId
+          });
+        });
+      });
+    }
+  };
+});
+
 angular.module('home').controller('NewTechnologyCtrl', function($scope, $state, technologyList, tagList, TagManager, technologyManager) {
   $scope.technology = technologyManager.createTechnology();
   $scope.addTag = function($tag) {
@@ -245,14 +294,15 @@ angular.module('home').controller('NewTechnologyCtrl', function($scope, $state, 
   return $scope.save = function() {
     $scope.technology.save();
     technologyList.push($scope.technology);
-    return $state.go('technologyList');
+    return $state.go('technologies');
   };
 });
 
 angular.module('home').controller('TechnologyCtrl', function($scope, technology, TagManager) {
+  var _base;
   $scope.technology = technology;
-  if (technology.tags == null) {
-    technology.tags = [];
+  if ((_base = $scope.technology).tags == null) {
+    _base.tags = [];
   }
   $scope.addTag = function($tag) {
     var tag;
@@ -264,11 +314,11 @@ angular.module('home').controller('TechnologyCtrl', function($scope, technology,
         return _.merge($tag, _tag);
       });
     }
-    technology.save();
+    $scope.technology.save();
     return true;
   };
   return $scope.save = function() {
-    return technology.save();
+    return $scope.technology.save();
   };
 });
 
