@@ -5,14 +5,10 @@ app.filter 'filterByTags', ->
   (technologies, query) ->
     return technologies unless query
     tags = query.toLowerCase().split(" ")
-    filtered = []
     technologies ?= []
-    technologies.forEach (technology) ->
+    _.filter technologies, (technology) ->
       technologyTags = (tag.label for tag in technology.tags or [])
-      matches = tags.every (tag) ->
-        _.findIndex(technologyTags, (technologyTag) ->
-            technologyTag.substr(0, tag.length).toLowerCase() == tag
-        ) > -1 or technology.title.substr(0, tag.length).toLowerCase() == tag
-      if matches
-        filtered.push technology
-    filtered
+      technologyTags = technologyTags.join(',').toLowerCase()
+      _.any tags, (tag) ->
+        _.contains(technologyTags, tag) or
+        _.contains(technology?.title?.toLowerCase(), tag)

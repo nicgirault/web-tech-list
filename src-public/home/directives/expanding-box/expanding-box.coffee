@@ -1,12 +1,11 @@
-app.directive 'expandingBox', ($timeout, $state) ->
+angular.module 'home'
+.directive 'expandingBox', ($timeout, $state) ->
   restrict: 'E'
-  templateUrl: 'expanding-box.html'
+  templateUrl: 'home/directives/expanding-box/expanding-box.html'
   scope:
     technology: '='
   link: (scope, element, attrs) ->
     box = element.children()
-    box.css 'background', "url('#{scope.technology.logoUrl}') no-repeat center"
-    box.css 'background-size', "150px"
 
     element.on 'click', (event) ->
       box = element.children()
@@ -47,7 +46,7 @@ app.directive 'expandingBox', ($timeout, $state) ->
       newBox.css "width", "#{bodyWidth}px"
       newBox.css "height", "#{bodyHeight}px"
       newBox.css "transform", "translate(#{-leftTranslation}px,#{-topTranslation}px)"
-      newBox.css "transition","all 1s"
+      newBox.css "transition","width 0.5s, height 0.5s, position 0.5s, transform 0.5s"
 
-      newBox.on 'transitionend', ->
+      newBox.one 'transitionend', ->
         $state.go 'technology', id: scope.technology.objectId
