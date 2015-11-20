@@ -15,7 +15,7 @@ gulp.task 'vendor', (done) ->
     'bower_components/angulartics/src/angulartics.js'
     'bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js'
     'bower_components/moment/moment.js'
-    'bower_components/lodash/dist/lodash.js'
+    'bower_components/lodash/lodash.js'
     'bower_components/ng-tags-input/ng-tags-input.min.js'
     'bower_components/angular-messages/angular-messages.min.js'
   ]

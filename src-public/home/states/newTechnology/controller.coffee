@@ -19,4 +19,4 @@ angular.module('home').controller 'NewTechnologyCtrl', (
   $scope.save = ->
     $scope.technology.save()
     technologyList.push $scope.technology
-    $state.go 'technologyList'
+    $state.go 'technologies'

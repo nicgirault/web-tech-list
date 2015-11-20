@@ -1,6 +1,6 @@
 angular.module('home').controller 'TechnologyCtrl', ($scope, technology, TagManager) ->
   $scope.technology = technology
-  technology.tags = [] unless technology.tags?
+  $scope.technology.tags ?= []
 
   $scope.addTag = ($tag) ->
     tag = TagManager.find $tag.label
@@ -9,8 +9,8 @@ angular.module('home').controller 'TechnologyCtrl', ($scope, technology, TagMana
     else
       TagManager.add($tag.label).then (_tag) ->
         _.merge $tag, _tag
-    technology.save()
+    $scope.technology.save()
     true # true because tag is always valid
 
   $scope.save = ->
-    technology.save()
+    $scope.technology.save()
