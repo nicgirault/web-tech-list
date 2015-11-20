@@ -11,6 +11,11 @@ app = angular.module 'webTechList', [
   'angulartics.google.analytics'
   'ngTagsInput'
   'ngAnimate'
+  'ngMessages'
+
+  # app modules
+  'home'
+  'tag'
 ]
 
 app.run ($rootScope, $state) ->

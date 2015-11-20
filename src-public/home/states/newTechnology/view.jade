@@ -1,0 +1,29 @@
+.container
+  form(name="form")
+    .form-group(ng-class="{ 'has-error' : form.title.$invalid && ! form.title.$pristine }")
+      label Technology name
+      input.form-control(
+        type="text"
+        ng-model="technology.title"
+        name="title"
+        autofocus
+        technology-blacklist
+        required
+      )
+      .error-messages(ng-messages="form.title.$error" role="alert")
+        div(ng-message="technology-blacklist") This technology already exists
+        div(ng-message="required" ng-if="!form.title.$pristine") This field is required
+    .form-group
+      label Logo URL
+      input.form-control(ng-model="technology.logoUrl")
+      img.logo(ng-src="{{technology.logoUrl}}" ng-if="technology.logoUrl")
+
+    .form-group
+      label Technology tags
+      tags-input(
+        ng-model="technology.tags"
+        display-property="label"
+        on-tag-adding="addTag($tag)"
+      )
+        auto-complete(source="autocomplete($query)" min-length="1")
+    button.new-technology-submit.btn.btn-primary(ng-click="save()" ng-disabled="form.$invalid") Save

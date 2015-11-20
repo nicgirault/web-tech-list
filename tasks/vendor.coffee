@@ -17,6 +17,7 @@ gulp.task 'vendor', (done) ->
     'bower_components/moment/moment.js'
     'bower_components/lodash/dist/lodash.js'
     'bower_components/ng-tags-input/ng-tags-input.min.js'
+    'bower_components/angular-messages/angular-messages.min.js'
   ]
   .pipe(concat('vendor.js'))
   .on 'error', gutil.log

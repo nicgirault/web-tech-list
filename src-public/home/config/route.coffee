@@ -1,4 +1,4 @@
-app.config (
+angular.module('home').config (
   $locationProvider
   $stateProvider
   $urlRouterProvider
@@ -11,18 +11,28 @@ app.config (
     url: '/technology'
     templateUrl: 'technologies.html'
     controller: 'TechnologyListCtrl'
+    templateUrl: 'home/states/technologyList/view.html'
     resolve:
       technologyList: (technologyManager) ->
         technologyManager.promise
   .state 'technology',
     url: '/technology/:id'
     controller: 'TechnologyCtrl'
-    templateUrl: 'technology.html'
+    templateUrl: 'home/states/technology/view.html'
     resolve:
-      technology: (Technology, tagManager, $stateParams) ->
+      technology: (Technology, TagManager, $stateParams) ->
         return unless $stateParams.id
         Technology.find $stateParams.id
-      tagList: (tagManager) ->
-        tagManager.promise
+      tagList: (TagManager) ->
+        TagManager.promise
+  .state 'newTechnology',
+    url: '/new'
+    controller: 'NewTechnologyCtrl'
+    templateUrl: 'home/states/newTechnology/view.html'
+    resolve:
+      technologyList: (technologyManager) ->
+        technologyManager.promise
+      tagList: (TagManager) ->
+        TagManager.promise
 
   $urlRouterProvider.otherwise '/technology'

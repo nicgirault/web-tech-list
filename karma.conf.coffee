@@ -17,7 +17,7 @@ module.exports = (config) ->
       'bower_components/angular-mocks/angular-mocks.js'
       'src-public/**/*.coffee'
       'public/js/templates.js'
-      'tests/unit/**/*.coffee'
+      'tests/**/*.coffee'
     ]).value()
 
 

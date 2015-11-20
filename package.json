@@ -14,7 +14,8 @@
     "watch": "node_modules/.bin/gulp watch",
     "deploy-github": "node_modules/.bin/gulp deploy-github-pages",
     "deploy-parse": "parse deploy",
-    "test": "karma start karma.conf.coffee --single-run"
+    "test": "karma start karma.conf.coffee --single-run",
+    "start": "gulp watch"
   },
   "dependencies": {
     "bower": "1.3.x",

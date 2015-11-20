@@ -1,8 +1,8 @@
 describe 'TechnologyController', ->
 
-  beforeEach module 'webTechList'
+  beforeEach module 'home'
   controller = null
-  tagManager = null
+  TagManager = null
   technology =
     save: -> null
   save = sinon.spy technology, 'save'
@@ -10,14 +10,14 @@ describe 'TechnologyController', ->
   $tag =
     label: 'js'
 
-  beforeEach inject ($controller, _tagManager_) ->
-    tagManager = _tagManager_
+  beforeEach inject ($controller, _TagManager_) ->
+    TagManager = _TagManager_
 
     $scope = {}
     controller = $controller 'TechnologyCtrl', {
       $scope: $scope
       technology: technology
-      tagManager: tagManager
+      TagManager: TagManager
     }
 
   describe '$scope.save', ->
@@ -28,34 +28,34 @@ describe 'TechnologyController', ->
       expect(save).to.have.been.calledOnce
 
   describe '$scope.addTag', ->
-    it 'should call tagManager.find', ->
-      find = sinon.spy tagManager, 'find'
+    it 'should call TagManager.find', ->
+      find = sinon.spy TagManager, 'find'
 
       $tag = {}
       $scope.addTag $tag
       expect(find).to.have.been.calledOnce
 
     it 'should set tag.objectId if tag exists', ->
-      tagManagerMock = sinon.mock tagManager
+      TagManagerMock = sinon.mock TagManager
       $tag =
         label: 'js'
-      tagManagerMock.restore()
-      tagManagerMock.expects('find').once().withExactArgs('js').returns({objectId: 'abcdef'})
+      TagManagerMock.restore()
+      TagManagerMock.expects('find').once().withExactArgs('js').returns({objectId: 'abcdef'})
 
       $scope.addTag $tag
       expect($tag.objectId).to.equals('abcdef')
-      tagManagerMock.verify()
+      TagManagerMock.verify()
 
     it 'should create a new tag if tag is not found', ->
-      tagManagerMock = sinon.mock tagManager
-      tagManagerMock.restore()
+      TagManagerMock = sinon.mock TagManager
+      TagManagerMock.restore()
       $tag =
         label: 'js'
-      tagManagerMock.expects('find').once().withExactArgs('js').returns(undefined)
-      tagManagerMock.expects('add').once().withExactArgs('js').returns( then: (f) -> f({objectId: '12345', tag: 'js'})) # je n'arrive pas à utiliser sinon-as-promised
+      TagManagerMock.expects('find').once().withExactArgs('js').returns(undefined)
+      TagManagerMock.expects('add').once().withExactArgs('js').returns( then: (f) -> f({objectId: '12345', tag: 'js'})) # je n'arrive pas à utiliser sinon-as-promised
       save.reset()
 
       $scope.addTag $tag
       expect($tag.objectId).to.equals('12345')
-      tagManagerMock.verify()
+      TagManagerMock.verify()
       expect(save).to.have.been.calledOnce
