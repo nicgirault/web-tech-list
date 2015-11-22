@@ -48,28 +48,22 @@ describe 'TagManager', ->
       expect(newTagList).to.include label: 'returned new label'
 
   describe 'autocomplete', ->
-    it 'should return a promise eventually resolving an array', (done) ->
-      promise = @TagManager.autocomplete 's'
-
-      promise.then (returnedTags) ->
-        expect(returnedTags).to.be.an.instanceof(Array)
-        done()
+    it 'should return an array of tags', (done) ->
+      returnedTags = @TagManager.autocomplete 's'
+      expect(returnedTags).to.be.an.instanceof(Array)
+      done()
       @rootScope.$apply()
 
     it 'should filter tags as expected 1', (done) ->
-      promise = @TagManager.autocomplete 's'
-
-      promise.then (returnedTags) ->
-        expect(returnedTags).to.include label: 'SAAS'
-        expect(returnedTags).to.include label: 'search'
-        done()
+      returnedTags = @TagManager.autocomplete 's'
+      expect(returnedTags).to.include label: 'SAAS'
+      expect(returnedTags).to.include label: 'search'
+      done()
       @rootScope.$apply()
 
     it 'should filter tags as expected 2', (done) ->
-      promise = @TagManager.autocomplete 'se'
-
-      promise.then (returnedTags) ->
-        expect(returnedTags).to.not.include label: 'SAAS'
-        expect(returnedTags).to.include label: 'search'
-        done()
+      returnedTags = @TagManager.autocomplete 'se'
+      expect(returnedTags).to.not.include label: 'SAAS'
+      expect(returnedTags).to.include label: 'search'
+      done()
       @rootScope.$apply()

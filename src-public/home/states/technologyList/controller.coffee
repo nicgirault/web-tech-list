@@ -1,24 +1,10 @@
-angular.module('home').controller 'TechnologyListCtrl', ($scope, technologyManager) ->
-
-  $scope.addTechnology = ->
-    $scope.newTechnology.save().then (technology) ->
-      $scope.technologies.push technology
-    $scope.newTechnology = technologyManager.createTechnology()
-
-  $scope.removeTechnology = (technology) ->
-    technology.destroy().then () ->
-      _.remove $scope.technologies, (technology) ->
-        technology.objectId is null
-
-  $scope.editingTechnology = (technology) ->
-    technology.editing = true
-
-  $scope.editTechnology = (technology) ->
-    technology.save()
-    technology.editing = false
-
+angular.module 'home'
+.controller 'TechnologyListCtrl', (
+  $rootScope
+  $scope
+  technologyManager
+  technologyList
+) ->
   $scope.vote = technologyManager.vote
 
-  $scope.technologies = technologyManager.getTechnologyList()
-
-  $scope.newTechnology = technologyManager.createTechnology()
+  $scope.technologies = technologyList

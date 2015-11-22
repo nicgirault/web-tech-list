@@ -18,6 +18,5 @@ angular.module('tag').service 'TagManager', (Tag, $q) ->
       return _tag
 
   autocomplete: (query) ->
-    $q (resolve, reject) ->
-      resolve _.filter tagList, (tag) ->
-        tag.label.substr(0, query.length).toLowerCase() == query.toLowerCase()
+    _.filter tagList, (tag) ->
+      _.contains tag.label.toLowerCase(), query.toLowerCase()
