@@ -6172,6 +6172,10 @@ body {
   max-height: 100%;
   margin: auto;
 }
+.cross:hover,
+.delete:hover {
+  color: #a94442;
+}
 tags-input .tags {
   border-radius: 5px;
 }
@@ -6206,9 +6210,6 @@ tags-input .tags .tag-item {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-.logo {
-  max-width: 200px;
 }
 .new-technology {
   position: fixed;
