@@ -1,7 +1,8 @@
 .row
   .col-xs-12.record
     h2 {{ technology.title }}
-      .close.pull-right.fa.fa-close(ui-sref='technologies')
+      .cross.pull-right.fa.fa-close(ui-sref='technologies')
+      .delete.pull-right.fa.fa-trash(ng-click='delete()')
 
     tags-input(
       ng-model="technology.tags"
@@ -9,6 +10,7 @@
       on-tag-adding="addTag($tag)"
       on-tag-removed="save()"
     )
+      auto-complete(source="autocomplete($query)" min-length="1")
 
     .form-group
       label Logo Url

@@ -14,7 +14,7 @@ angular.module('home').config (
     templateUrl: 'home/states/technologyList/view.html'
     resolve:
       technologyList: (technologyManager) ->
-        technologyManager.promise
+        technologyManager.getTechnologyList()
   .state 'technology',
     url: '/technology/:id'
     controller: 'TechnologyCtrl'
@@ -24,15 +24,13 @@ angular.module('home').config (
         return unless $stateParams.id
         Technology.find $stateParams.id
       tagList: (TagManager) ->
-        TagManager.promise
+        TagManager.getTagList()
   .state 'newTechnology',
     url: '/new'
     controller: 'NewTechnologyCtrl'
     templateUrl: 'home/states/newTechnology/view.html'
     resolve:
-      technologyList: (technologyManager) ->
-        technologyManager.promise
       tagList: (TagManager) ->
-        TagManager.promise
+        TagManager.getTagList()
 
   $urlRouterProvider.otherwise '/technology'

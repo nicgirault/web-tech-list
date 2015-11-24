@@ -1,4 +1,4 @@
-angular.module('home').controller 'TechnologyCtrl', ($scope, technology, TagManager) ->
+angular.module('home').controller 'TechnologyCtrl', ($scope, $state, technology, TagManager) ->
   $scope.technology = technology
   $scope.technology.tags ?= []
 
@@ -12,5 +12,12 @@ angular.module('home').controller 'TechnologyCtrl', ($scope, technology, TagMana
     $scope.technology.save()
     true # true because tag is always valid
 
+  $scope.autocomplete = TagManager.autocomplete
+
   $scope.save = ->
     $scope.technology.save()
+
+  $scope.delete = ->
+    $scope.technology.destroy()
+    .then ->
+      $state.go 'technologies'
